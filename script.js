@@ -91,6 +91,9 @@ function createCard(data) {
     try {
       el.setPointerCapture(e.pointerId);
     } catch(err) {}
+
+    // Apply initial scale down
+    el.style.transform = `translate3d(0, 0, 0) rotate(0deg) scale(0.95)`;
   }
 
   function handlePointerMove(e) {
@@ -115,9 +118,9 @@ function createCard(data) {
     hintRight.style.opacity = r;
     hintUp.style.opacity = u;
 
-    // Apply translation and slight rotation based on X movement
+    // Apply translation, slight rotation, and scale down based on X movement
     const rotation = currentX * 0.05;
-    el.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) rotate(${rotation}deg)`;
+    el.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) rotate(${rotation}deg) scale(0.95)`;
   }
 
   function handlePointerEnd(e) {
@@ -152,7 +155,7 @@ function createCard(data) {
       const flyX = currentX * flyMultiplier;
       const flyY = currentY * flyMultiplier;
       
-      el.style.transform = `translate3d(${flyX}px, ${flyY}px, 0) rotate(${currentX * 0.1}deg)`;
+      el.style.transform = `translate3d(${flyX}px, ${flyY}px, 0) rotate(${currentX * 0.1}deg) scale(0.95)`;
       el.style.opacity = '0';
       el.style.pointerEvents = 'none'; // Prevent any further interactions
       
@@ -164,8 +167,8 @@ function createCard(data) {
         }
       }, 300);
     } else {
-      // Didn't swipe far enough - snap back
-      el.style.transform = `translate3d(0, 0, 0) rotate(0deg)`;
+      // Didn't swipe far enough - snap back and bounce up to original size
+      el.style.transform = `translate3d(0, 0, 0) rotate(0deg) scale(1)`;
     }
     
     currentX = 0; 
