@@ -49,20 +49,29 @@ function createCard(data) {
   // Prevent native drag-and-drop which interrupts pointer events
   el.addEventListener('dragstart', (e) => e.preventDefault());
   
-  let label = '';
+  let labelEn = '';
+  let labelZh = '';
   switch(data.pos) {
-    case 'der': label = 'Maskulinum'; break;
-    case 'die': label = 'Femininum'; break;
-    case 'das': label = 'Neutrum'; break;
-    case 'verb': label = 'Verb'; break;
-    case 'adj': label = 'Adjektiv'; break;
+    case 'der': labelEn = 'Masculine'; labelZh = '阳性名词'; break;
+    case 'die': labelEn = 'Feminine'; labelZh = '阴性名词'; break;
+    case 'das': labelEn = 'Neuter'; labelZh = '中性名词'; break;
+    case 'verb': labelEn = 'Verb'; labelZh = '动词'; break;
+    case 'adj': labelEn = 'Adjective'; labelZh = '形容词'; break;
   }
 
   el.innerHTML = `
-    <span class="atlas-label">${label}</span>
-    <h2 class="card-word">${data.word}</h2>
-    <div class="card-translated">${data.translation[currentLang]}</div>
-    ${data.forms ? `<div class="card-forms">${data.forms}</div>` : ''}
+    <div class="card-inner">
+      <div class="card-front">
+        <span class="atlas-label" data-en="${labelEn}" data-zh="${labelZh}">${currentLang === 'zh' ? labelZh : labelEn}</span>
+        <h2 class="card-word">${data.word}</h2>
+      </div>
+      <div class="card-back">
+        <span class="atlas-label" data-en="${labelEn}" data-zh="${labelZh}">${currentLang === 'zh' ? labelZh : labelEn}</span>
+        <h2 class="card-word" style="font-size: 2rem; margin-bottom: 0.5rem;">${data.word}</h2>
+        <div class="card-translated">${data.translation[currentLang]}</div>
+        ${data.forms ? `<div class="card-forms">${data.forms}</div>` : ''}
+      </div>
+    </div>
   `;
   
   // Swipe Logic
@@ -145,9 +154,18 @@ function createCard(data) {
     hintRight.style.opacity = 0;
     hintUp.style.opacity = 0;
 
-    // classifySwipe logic threshold
-    const threshold = Math.min(window.innerWidth * 0.25, 120); 
+    // Check if it was a tap instead of a swipe
     const dist = Math.sqrt(currentX * currentX + currentY * currentY);
+    if (dist < 10) {
+      el.classList.toggle('is-flipped');
+      el.style.transform = `translate3d(0, 0, 0) rotate(0deg) scale(1)`;
+      currentX = 0;
+      currentY = 0;
+      return;
+    }
+
+    // classifySwipe logic threshold
+    const threshold = Math.min(window.innerWidth * 0.25, 120);
 
     if (dist > threshold) {
       // Swiped far enough - fly out
