@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TintWord - German Vocabulary App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="top-nav">
+    <div class="lang-toggle">
+      <button id="btn-en" class="active">EN</button>
+      <span class="divider">|</span>
+      <button id="btn-zh">中文</button>
+    </div>
+  </nav>
+
+  <header>
+    <h1>TintWord</h1>
+    <p class="slogan">Tint your Words!</p>
+  </header>
+
+  <main class="container">
+    <section class="swiper-section">
+      <div class="hint-text hint-left">← Hard</div>
+      <div class="hint-text hint-up">↑ Easy</div>
+      <div class="hint-text hint-right">OK →</div>
+      
+      <div class="cards-container" id="cards-container">
+        <!-- Cards will be dynamically injected by script.js -->
+      </div>
+    </section>
+
+    <section class="features-section">
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3 data-zh="直觉化滑动记忆" data-en="Intuitive Swipe Learning">Intuitive Swipe Learning</h3>
+          <p data-zh="基于先进的 FSRS 记忆算法，通过简单的划动操作即可标记词汇的掌握程度，让每一次复习都如行云流水般自然高效。" data-en="Powered by the advanced FSRS algorithm. Simply swipe to indicate your retention level, making every review session naturally fluid and highly efficient.">Powered by the advanced FSRS algorithm. Simply swipe to indicate your retention level, making every review session naturally fluid and highly efficient.</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3 data-zh="词性色彩编码" data-en="Visual Gender Coding">Visual Gender Coding</h3>
+          <p data-zh="背景色自动响应单词词性，视觉潜意识助你不再混淆 Der, Die, Das。" data-en="Card backgrounds automatically adapt to the noun's gender, utilizing visual memory to help you master Der, Die, and Das.">Card backgrounds automatically adapt to the noun's gender, utilizing visual memory to help you master Der, Die, and Das.</p>
+          <div class="pos-dots">
+            <span class="dot der" title="Der (Masculine)"></span>
+            <span class="dot die" title="Die (Feminine)"></span>
+            <span class="dot das" title="Das (Neuter)"></span>
+            <span class="dot verb" title="Verb"></span>
+            <span class="dot adj" title="Adjective"></span>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <h3 data-zh="详尽的词形变化" data-en="Comprehensive Morphology">Comprehensive Morphology</h3>
+          <p data-zh="内置完整的动词变位 (如: fährt ab, fuhr ab, ist abgefahren) 以及名词复数形式，全面攻克语法难关。" data-en="Includes complete verb conjugations (e.g., fährt ab, fuhr ab, ist abgefahren) and noun plurals to help you conquer German grammar.">Includes complete verb conjugations (e.g., fährt ab, fuhr ab, ist abgefahren) and noun plurals to help you conquer German grammar.</p>
+        </div>
+
+        <div class="feature-card">
+          <h3 data-zh="全阶段多语种词库" data-en="Comprehensive Multilingual Vocabulary">Comprehensive Multilingual Vocabulary</h3>
+          <p data-zh="涵盖 A1 至 C1 级别的 7000 个核心词汇。支持英语、中文、罗马尼亚语和土耳其语四种语言的无缝切换，结合真实语境例句，深入理解词义。" data-en="Master 7,000 core words from A1 to C1 levels. Seamlessly switch between English, Chinese, Romanian, and Turkish translations, complete with authentic contextual sentences.">Master 7,000 core words from A1 to C1 levels. Seamlessly switch between English, Chinese, Romanian, and Turkish translations, complete with authentic contextual sentences.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 TintWord. All rights reserved. | <a href="https://jliu.eu">jliu.eu</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
