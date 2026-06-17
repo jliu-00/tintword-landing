@@ -4,8 +4,8 @@ let currentLang = 'en';
 const cardsData = [
   { pos: "adj", word: "wunderschön", translation: { en: "gorgeous", zh: "极美的" }, forms: "" },
   { pos: "verb", word: "abfahren", translation: { en: "to depart", zh: "启程" }, forms: "fährt ab, fuhr ab, ist abgefahren" },
-  { pos: "das", word: "das Fernweh", translation: { en: "Wanderlust", zh: "远方之思" }, forms: "die Fernweh" },
-  { pos: "die", word: "die Kultur", translation: { en: "Culture", zh: "文化" }, forms: "die Kulturen" },
+  { pos: "das", word: "das Fernweh", translation: { en: "Wanderlust", zh: "远方之思" }, forms: "" },
+  { pos: "die", word: "die Kultur", translation: { en: "Culture", zh: "文化" }, forms: "" },
   { pos: "der", word: "der Wortschatz", translation: { en: "Vocabulary", zh: "词汇" }, forms: "die Wortschätze" },
 ];
 
