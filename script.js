@@ -10,9 +10,6 @@ const cardsData = [
 ];
 
 const container = document.getElementById('cards-container');
-const hintLeft = document.querySelector('.hint-left');
-const hintRight = document.querySelector('.hint-right');
-const hintUp = document.querySelector('.hint-up');
 
 // Language Toggle Logic
 const btnEn = document.getElementById('btn-en');
@@ -110,23 +107,6 @@ function createCard(data) {
     currentX = e.clientX - startX;
     currentY = e.clientY - startY;
 
-    // Dynamically show hints based on trajectory
-    const dist = Math.sqrt(currentX * currentX + currentY * currentY);
-    let l = 0, r = 0, u = 0;
-    
-    if (dist > 15) { 
-       if (currentY < 0 && Math.abs(currentY) > Math.abs(currentX) * 0.5) {
-         u = Math.min(1, Math.abs(currentY) / 100);
-       } else if (currentX < 0) {
-         l = Math.min(1, Math.abs(currentX) / 100);
-       } else if (currentX > 0) {
-         r = Math.min(1, currentX / 100);
-       }
-    }
-    hintLeft.style.opacity = l;
-    hintRight.style.opacity = r;
-    hintUp.style.opacity = u;
-
     // Apply translation, slight rotation, and scale down based on X movement
     const rotation = currentX * 0.05;
     el.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) rotate(${rotation}deg) scale(0.95)`;
@@ -148,11 +128,6 @@ function createCard(data) {
         el.releasePointerCapture(e.pointerId);
       }
     } catch(err) {}
-
-    // Reset hints
-    hintLeft.style.opacity = 0;
-    hintRight.style.opacity = 0;
-    hintUp.style.opacity = 0;
 
     // Check if it was a tap instead of a swipe
     const dist = Math.sqrt(currentX * currentX + currentY * currentY);
