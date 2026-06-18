@@ -5,10 +5,16 @@ import Matter from "matter-js";
 const wordsData = [
   { text: "der Baum", color: "#6B7F8C", gender: "der", w: 120, h: 48 },
   { text: "der Tisch", color: "#6B7F8C", gender: "der", w: 120, h: 48 },
+  { text: "der Hund", color: "#6B7F8C", gender: "der", w: 120, h: 48 },
+  { text: "der Apfel", color: "#6B7F8C", gender: "der", w: 120, h: 48 },
   { text: "die Frau", color: "#AD8A8D", gender: "die", w: 110, h: 48 },
   { text: "die Tür", color: "#AD8A8D", gender: "die", w: 100, h: 48 },
+  { text: "die Katze", color: "#AD8A8D", gender: "die", w: 120, h: 48 },
+  { text: "die Blume", color: "#AD8A8D", gender: "die", w: 120, h: 48 },
   { text: "das Kind", color: "#8B9C89", gender: "das", w: 110, h: 48 },
   { text: "das Auto", color: "#8B9C89", gender: "das", w: 110, h: 48 },
+  { text: "das Haus", color: "#8B9C89", gender: "das", w: 110, h: 48 },
+  { text: "das Buch", color: "#8B9C89", gender: "das", w: 110, h: 48 },
   { text: "abfahren", color: "#9B929A", gender: "none", w: 130, h: 48 },
   { text: "schnell", color: "#9C928A", gender: "none", w: 110, h: 48 },
 ];
@@ -87,6 +93,10 @@ export function PhysicsPool() {
       constraint: { stiffness: 0.2, render: { visible: false } }
     });
 
+    // FIX: prevent Matter.js from capturing scroll events so the page is still scrollable
+    mouse.element.removeEventListener("mousewheel", (mouse as any).mousewheel);
+    mouse.element.removeEventListener("DOMMouseScroll", (mouse as any).mousewheel);
+
     World.add(world, mouseConstraint);
 
     // FIX: Force drop body if mouse is released outside the container
@@ -157,14 +167,18 @@ export function PhysicsPool() {
                 }
               } else {
                 // EXPLOSIVE repulsion from wrong vortex
-                if (distSq < 10000) {
-                  const repelForce = 0.005 * (10000 - distSq) / 10000;
+                if (distSq < 15000) {
+                  // Force drop if user is holding it
+                  if (mouseConstraint.body === bodyA) {
+                    (mouseConstraint as any).body = null;
+                    mouseConstraint.mouse.button = -1;
+                  }
+                  
+                  const repelForce = 0.04 * (15000 - distSq) / 15000;
                   Matter.Body.applyForce(bodyA, bodyA.position, { 
                     x: -(dx / Math.sqrt(distSq)) * repelForce, 
                     y: -(dy / Math.sqrt(distSq)) * repelForce 
                   });
-                  // Optionally decrease score on wrong hit
-                  // setScore(s => Math.max(0, s - 1)); 
                 }
               }
             }
@@ -240,20 +254,19 @@ export function PhysicsPool() {
     <div className="w-full h-[600px] relative overflow-hidden pointer-events-auto" ref={containerRef}>
       
       {/* Background UI & Score */}
-      <div className="absolute top-10 w-full flex flex-col items-center justify-center pointer-events-none opacity-40 z-0">
-        <h2 className="text-3xl md:text-5xl font-serif tracking-widest text-foreground/30">Singularity</h2>
+      <div className="absolute top-10 w-full flex flex-col items-center justify-center pointer-events-none z-0">
         {score > 0 && (
-          <p className="text-2xl font-mono text-accent mt-2 tracking-widest">Score: {score}</p>
+          <p className="text-2xl font-mono text-accent mt-2 tracking-widest opacity-40">Score: {score}</p>
         )}
       </div>
 
       {/* Wandering Vortex Visuals */}
-      {/* They are extremely subtle radial gradients */}
+      {/* Deepened colors and opacity to make them clearly visible */}
       <div 
         className="absolute rounded-full pointer-events-none transition-transform duration-[50ms]"
         style={{
           width: 160, height: 160,
-          background: "radial-gradient(circle, rgba(107,127,140,0.15) 0%, rgba(107,127,140,0) 70%)",
+          background: "radial-gradient(circle, rgba(107,127,140,0.8) 0%, rgba(107,127,140,0) 70%)",
           transform: `translate(${vortexPositions.der.x - 80}px, ${vortexPositions.der.y - 80}px)`
         }}
       />
@@ -261,7 +274,7 @@ export function PhysicsPool() {
         className="absolute rounded-full pointer-events-none transition-transform duration-[50ms]"
         style={{
           width: 160, height: 160,
-          background: "radial-gradient(circle, rgba(173,138,141,0.15) 0%, rgba(173,138,141,0) 70%)",
+          background: "radial-gradient(circle, rgba(173,138,141,0.8) 0%, rgba(173,138,141,0) 70%)",
           transform: `translate(${vortexPositions.die.x - 80}px, ${vortexPositions.die.y - 80}px)`
         }}
       />
@@ -269,7 +282,7 @@ export function PhysicsPool() {
         className="absolute rounded-full pointer-events-none transition-transform duration-[50ms]"
         style={{
           width: 160, height: 160,
-          background: "radial-gradient(circle, rgba(139,156,137,0.15) 0%, rgba(139,156,137,0) 70%)",
+          background: "radial-gradient(circle, rgba(139,156,137,0.8) 0%, rgba(139,156,137,0) 70%)",
           transform: `translate(${vortexPositions.das.x - 80}px, ${vortexPositions.das.y - 80}px)`
         }}
       />
