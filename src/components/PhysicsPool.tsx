@@ -174,10 +174,11 @@ export function PhysicsPool() {
                     mouseConstraint.mouse.button = -1;
                   }
                   
-                  const repelForce = 0.1 * (30000 - distSq) / 30000;
-                  Matter.Body.applyForce(bodyA, bodyA.position, { 
-                    x: -(dx / Math.sqrt(distSq)) * repelForce, 
-                    y: -(dy / Math.sqrt(distSq)) * repelForce 
+                  // Use setVelocity for a violent, guaranteed blast
+                  const speed = 50 * (30000 - distSq) / 30000;
+                  Matter.Body.setVelocity(bodyA, { 
+                    x: -(dx / Math.sqrt(distSq)) * speed, 
+                    y: -(dy / Math.sqrt(distSq)) * speed 
                   });
                 }
               }
@@ -293,7 +294,7 @@ export function PhysicsPool() {
         <div
           key={i}
           ref={(el) => { elementsRef.current[i] = el; }}
-          className="absolute top-0 left-0 flex items-center justify-center text-white font-serif text-xl rounded-xl shadow-lg cursor-grab active:cursor-grabbing select-none hover:brightness-110 transition-[transform,opacity] duration-300 ease-out z-10"
+          className="absolute top-0 left-0 flex items-center justify-center text-white font-serif text-xl rounded-xl shadow-lg cursor-grab active:cursor-grabbing select-none hover:brightness-110 transition-opacity duration-300 ease-out z-10"
           style={{
             width: w.w,
             height: w.h,
