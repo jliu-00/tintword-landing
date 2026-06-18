@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #ece5dc;
+  --color-foreground: #2d2926;
+  --color-muted: #dcd4cb;
+  --color-muted-foreground: #7d756d;
+  --color-accent: #a53d26;
+
+  --font-serif: "Newsreader", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+@layer base {
+  :root {
+    --background: #ECE5DC;
+    --foreground: #2D2926;
+    --muted: #DCD4CB;
+    --muted-foreground: #7D756D;
+    --accent: #A53D26;
+    
+    --die-color: #E11D48;
+    --das-color: #10B981;
+    --der-color: #3B82F6;
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    /* Micro-retro noise texture */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    font-family: var(--font-serif);
+    overflow-x: hidden;
+  }
+}
