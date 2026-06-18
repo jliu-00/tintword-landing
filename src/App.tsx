@@ -3,6 +3,8 @@ import { useState } from "react";
 import { LanguageToggle } from "./components/LanguageToggle";
 import { TintWordCTA } from "./components/TintWordCTA";
 import { SwipeableFeatures } from "./components/SwipeableFeatures";
+import { LiquidCursor } from "./components/LiquidCursor";
+import { PhysicsPool } from "./components/PhysicsPool";
 
 export default function App() {
   // Global drag value for ambient tinting
@@ -24,6 +26,8 @@ export default function App() {
       style={{ backgroundColor: ambientColor }}
       transition={{ duration: 0.5 }}
     >
+      <LiquidCursor />
+
       {/* Top Nav */}
       <nav className="absolute top-6 right-6 md:top-10 md:right-12 z-50">
         <LanguageToggle lang={lang} setLang={setLang} />
@@ -35,9 +39,12 @@ export default function App() {
 
         {/* Feature Cards Deck */}
         <SwipeableFeatures lang={lang} globalDragX={globalDragX} />
+        
+        {/* Gravity Physics Pool */}
+        <PhysicsPool />
       </main>
 
-      <footer className="w-full border-t border-foreground/10 py-8 text-center text-muted-foreground mt-24">
+      <footer className="w-full border-t border-foreground/10 py-8 text-center text-muted-foreground">
         <p className="text-sm font-mono tracking-widest uppercase">
           &copy; 2026 TintWord. All rights reserved. |{" "}
           <a href="https://jliu.eu" className="hover:text-accent transition-colors">jliu.eu</a> |{" "}
