@@ -21,7 +21,11 @@ export function TintWordCTA({ lang, globalDragX }: TintWordCTAProps) {
   const textShadow = useMotionTemplate`0px 10px 80px ${auraColor}, 0px 2px 20px ${auraColor}`;
 
   const subtitleEn = "An intuitive German vocabulary app that paints language as colour. Powered by the FSRS algorithm, it leverages visual memory for noun genders (Der, Die, Das)—turning grammar into a fluid palette you can feel.";
-  const subtitleZh = "一款直觉化的德语背单词应用。基于强大的 FSRS 记忆算法，用色彩潜移默化地帮您掌握词汇，彻底告别枯燥的 Der, Die, Das 死记硬背。";
+  const subtitleZh = (
+    <>
+      一款直觉化的德语背单词应用。基于强大的 FSRS 记忆算法，用色彩潜移默化地帮您掌握词汇，彻底告别枯燥的 <span className="inline-block">Der, Die, Das 死记硬背。</span>
+    </>
+  );
 
   return (
     <section className="relative w-full max-w-[800px] pt-[15vh] pb-12 md:pt-[20vh] md:ml-[5%]">
