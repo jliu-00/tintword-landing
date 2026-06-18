@@ -90,7 +90,7 @@ export function PhysicsPool() {
     const mouse = Mouse.create(containerRef.current);
     const mouseConstraint = MouseConstraint.create(engine, {
       mouse: mouse,
-      constraint: { stiffness: 0.2, render: { visible: false } }
+      constraint: { stiffness: 0.9, render: { visible: false } }
     });
 
     // FIX: prevent Matter.js from capturing scroll events so the page is still scrollable
@@ -167,14 +167,14 @@ export function PhysicsPool() {
                 }
               } else {
                 // EXPLOSIVE repulsion from wrong vortex
-                if (distSq < 15000) {
+                if (distSq < 30000) {
                   // Force drop if user is holding it
                   if (mouseConstraint.body === bodyA) {
                     (mouseConstraint as any).body = null;
                     mouseConstraint.mouse.button = -1;
                   }
                   
-                  const repelForce = 0.04 * (15000 - distSq) / 15000;
+                  const repelForce = 0.1 * (30000 - distSq) / 30000;
                   Matter.Body.applyForce(bodyA, bodyA.position, { 
                     x: -(dx / Math.sqrt(distSq)) * repelForce, 
                     y: -(dy / Math.sqrt(distSq)) * repelForce 
@@ -251,7 +251,8 @@ export function PhysicsPool() {
 
   return (
     // Removed border, background, and shadow to blend seamlessly into the page
-    <div className="w-full h-[600px] relative overflow-hidden pointer-events-auto" ref={containerRef}>
+    // Using overflow-visible so blocks don't get abruptly cut off at the container edges
+    <div className="w-full h-[600px] relative overflow-visible pointer-events-auto" ref={containerRef}>
       
       {/* Background UI & Score */}
       <div className="absolute top-10 w-full flex flex-col items-center justify-center pointer-events-none z-0">
