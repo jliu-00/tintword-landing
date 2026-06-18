@@ -30,11 +30,11 @@ const features: Feature[] = [
     pos: "die",
     component: (
       <div className="flex gap-3 mt-4">
-        <span className="w-3 h-3 rounded-full bg-[#3B82F6] shadow-[0_0_10px_rgba(59,130,246,0.5)]" title="Der"></span>
-        <span className="w-3 h-3 rounded-full bg-[#E11D48] shadow-[0_0_10px_rgba(225,29,72,0.5)]" title="Die"></span>
-        <span className="w-3 h-3 rounded-full bg-[#10B981] shadow-[0_0_10px_rgba(16,185,129,0.5)]" title="Das"></span>
-        <span className="w-3 h-3 rounded-full bg-[#A89E90]" title="Verb"></span>
-        <span className="w-3 h-3 rounded-full bg-[#DCD4CB]" title="Adj"></span>
+        <span className="w-3 h-3 rounded-full bg-[#8B9EA8] shadow-[0_0_8px_rgba(139,158,168,0.5)]" title="Der"></span>
+        <span className="w-3 h-3 rounded-full bg-[#C49FA2] shadow-[0_0_8px_rgba(196,159,162,0.5)]" title="Die"></span>
+        <span className="w-3 h-3 rounded-full bg-[#A8B5A0] shadow-[0_0_8px_rgba(168,181,160,0.5)]" title="Das"></span>
+        <span className="w-3 h-3 rounded-full bg-[#B5AFA8]" title="Verb"></span>
+        <span className="w-3 h-3 rounded-full bg-[#A899B5]" title="Adj"></span>
       </div>
     )
   },
