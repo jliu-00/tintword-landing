@@ -229,7 +229,7 @@ function FeatureCard({
           <h3 className="font-serif text-3xl mb-4 text-white">
             {lang === "en" ? feature.titleEn : feature.titleZh}
           </h3>
-          <p className="leading-relaxed text-[15px] md:text-[16px] text-white/90">
+          <p className="leading-relaxed text-[15px] md:text-[16px] text-white/90 text-pretty">
             {lang === "en" ? feature.descEn : feature.descZh}
           </p>
           

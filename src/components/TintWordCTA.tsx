@@ -69,7 +69,7 @@ export function TintWordCTA({ lang, globalDragX }: TintWordCTAProps) {
         initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.6 }}
-        className="mt-8 max-w-[500px] text-muted-foreground"
+        className="mt-8 max-w-[500px] text-muted-foreground text-pretty"
         style={{ fontSize: "1.1rem", lineHeight: 1.6 }}
       >
         {lang === "en" ? subtitleEn : subtitleZh}
