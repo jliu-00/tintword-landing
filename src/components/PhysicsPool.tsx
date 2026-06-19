@@ -3,18 +3,18 @@ import Matter from "matter-js";
 
 // Enhanced Morandi Colors & Genders
 const wordsData = [
-  { text: "der Baum", color: "#6B7F8C", gender: "der", w: 120, h: 48 },
-  { text: "der Tisch", color: "#6B7F8C", gender: "der", w: 120, h: 48 },
-  { text: "der Hund", color: "#6B7F8C", gender: "der", w: 120, h: 48 },
-  { text: "der Apfel", color: "#6B7F8C", gender: "der", w: 120, h: 48 },
-  { text: "die Frau", color: "#AD8A8D", gender: "die", w: 110, h: 48 },
-  { text: "die Tür", color: "#AD8A8D", gender: "die", w: 100, h: 48 },
-  { text: "die Katze", color: "#AD8A8D", gender: "die", w: 120, h: 48 },
-  { text: "die Blume", color: "#AD8A8D", gender: "die", w: 120, h: 48 },
-  { text: "das Kind", color: "#8B9C89", gender: "das", w: 110, h: 48 },
-  { text: "das Auto", color: "#8B9C89", gender: "das", w: 110, h: 48 },
-  { text: "das Haus", color: "#8B9C89", gender: "das", w: 110, h: 48 },
-  { text: "das Buch", color: "#8B9C89", gender: "das", w: 110, h: 48 },
+  { text: "der Baum", color: "var(--der-color)", gender: "der", w: 120, h: 48 },
+  { text: "der Tisch", color: "var(--der-color)", gender: "der", w: 120, h: 48 },
+  { text: "der Hund", color: "var(--der-color)", gender: "der", w: 120, h: 48 },
+  { text: "der Apfel", color: "var(--der-color)", gender: "der", w: 120, h: 48 },
+  { text: "die Frau", color: "var(--die-color)", gender: "die", w: 110, h: 48 },
+  { text: "die Tür", color: "var(--die-color)", gender: "die", w: 100, h: 48 },
+  { text: "die Katze", color: "var(--die-color)", gender: "die", w: 120, h: 48 },
+  { text: "die Blume", color: "var(--die-color)", gender: "die", w: 120, h: 48 },
+  { text: "das Kind", color: "var(--das-color)", gender: "das", w: 110, h: 48 },
+  { text: "das Auto", color: "var(--das-color)", gender: "das", w: 110, h: 48 },
+  { text: "das Haus", color: "var(--das-color)", gender: "das", w: 110, h: 48 },
+  { text: "das Buch", color: "var(--das-color)", gender: "das", w: 110, h: 48 },
 ];
 
 export function PhysicsPool() {
@@ -110,8 +110,41 @@ export function PhysicsPool() {
     });
 
     // FIX: prevent Matter.js from capturing scroll events so the page is still scrollable
+    // Matter.js aggressively sets touch-action: none and binds global preventDefault handlers
+    mouse.element.style.touchAction = "auto";
+    (mouse.element.style as any).webkitUserSelect = "auto";
+    
+    // Remove Matter's default aggressive wheel and touch handlers
     mouse.element.removeEventListener("mousewheel", (mouse as any).mousewheel);
     mouse.element.removeEventListener("DOMMouseScroll", (mouse as any).mousewheel);
+    
+    mouse.element.removeEventListener("touchstart", (mouse as any).mousedown);
+    mouse.element.removeEventListener("touchmove", (mouse as any).mousemove);
+    mouse.element.removeEventListener("touchend", (mouse as any).mouseup);
+
+    let isDragging = false;
+    const handleTouchStart = (e: any) => {
+      if ((e.target as HTMLElement).closest('.word-block')) {
+        isDragging = true;
+        (mouse as any).mousedown(e);
+      }
+    };
+    const handleTouchMove = (e: any) => {
+      if (isDragging) {
+        (mouse as any).mousemove(e);
+      }
+    };
+    const handleTouchEnd = (e: any) => {
+      if (isDragging) {
+        isDragging = false;
+        (mouse as any).mouseup(e);
+      }
+    };
+
+    mouse.element.addEventListener("touchstart", handleTouchStart, { passive: false });
+    mouse.element.addEventListener("touchmove", handleTouchMove, { passive: false });
+    mouse.element.addEventListener("touchend", handleTouchEnd, { passive: false });
+
 
     World.add(world, mouseConstraint);
 
@@ -348,29 +381,32 @@ export function PhysicsPool() {
       </div>
 
       {/* Wandering Vortex Visuals */}
-      {/* Deepened colors and opacity to make them clearly visible */}
+      {/* Sleek, glowing gemstone vortexes using CSS color-mix for opacity */}
       <div 
         className="absolute rounded-full pointer-events-none transition-transform duration-[50ms]"
         style={{
           width: 160, height: 160,
-          background: "radial-gradient(circle, rgba(107,127,140,0.8) 0%, rgba(107,127,140,0) 70%)",
-          transform: `translate(${vortexPositions.der.x - 80}px, ${vortexPositions.der.y - 80}px)`
+          background: "radial-gradient(circle, color-mix(in srgb, var(--der-color) 40%, transparent) 0%, transparent 70%)",
+          transform: `translate(${vortexPositions.der.x - 80}px, ${vortexPositions.der.y - 80}px)`,
+          boxShadow: "0 0 40px color-mix(in srgb, var(--der-color) 20%, transparent)"
         }}
       />
       <div 
         className="absolute rounded-full pointer-events-none transition-transform duration-[50ms]"
         style={{
           width: 160, height: 160,
-          background: "radial-gradient(circle, rgba(173,138,141,0.8) 0%, rgba(173,138,141,0) 70%)",
-          transform: `translate(${vortexPositions.die.x - 80}px, ${vortexPositions.die.y - 80}px)`
+          background: "radial-gradient(circle, color-mix(in srgb, var(--die-color) 40%, transparent) 0%, transparent 70%)",
+          transform: `translate(${vortexPositions.die.x - 80}px, ${vortexPositions.die.y - 80}px)`,
+          boxShadow: "0 0 40px color-mix(in srgb, var(--die-color) 20%, transparent)"
         }}
       />
       <div 
         className="absolute rounded-full pointer-events-none transition-transform duration-[50ms]"
         style={{
           width: 160, height: 160,
-          background: "radial-gradient(circle, rgba(139,156,137,0.8) 0%, rgba(139,156,137,0) 70%)",
-          transform: `translate(${vortexPositions.das.x - 80}px, ${vortexPositions.das.y - 80}px)`
+          background: "radial-gradient(circle, color-mix(in srgb, var(--das-color) 40%, transparent) 0%, transparent 70%)",
+          transform: `translate(${vortexPositions.das.x - 80}px, ${vortexPositions.das.y - 80}px)`,
+          boxShadow: "0 0 40px color-mix(in srgb, var(--das-color) 20%, transparent)"
         }}
       />
 
@@ -379,12 +415,12 @@ export function PhysicsPool() {
         <div
           key={i}
           ref={(el) => { elementsRef.current[i] = el; }}
-          className="absolute top-0 left-0 flex items-center justify-center text-white font-serif text-xl rounded-xl shadow-lg cursor-grab active:cursor-grabbing select-none hover:brightness-110 transition-opacity duration-300 ease-out z-10"
+          className="word-block absolute top-0 left-0 flex items-center justify-center text-white font-serif text-xl rounded-2xl cursor-grab active:cursor-grabbing select-none hover:brightness-125 transition-all duration-300 ease-out z-10 border border-white/20 backdrop-blur-md"
           style={{
             width: w.w,
             height: w.h,
-            backgroundColor: w.color,
-            boxShadow: "inset 0 2px 4px rgba(255,255,255,0.3), 0 8px 16px rgba(0,0,0,0.15)"
+            backgroundColor: `color-mix(in srgb, ${w.color} 55%, transparent)`,
+            boxShadow: `0 8px 32px 0 color-mix(in srgb, ${w.color} 30%, transparent), inset 0 2px 4px rgba(255,255,255,0.3)`
           }}
         >
           {w.text}

@@ -13,6 +13,7 @@
 
 @layer base {
   :root {
+    /* Light Mode: Cream and Warm Tones */
     --background: #ECE5DC;
     --foreground: #2D2926;
     --muted: #DCD4CB;
@@ -22,6 +23,22 @@
     --die-color: #E11D48;
     --das-color: #10B981;
     --der-color: #3B82F6;
+  }
+
+  /* Native Dark Mode: Sleek Obsidian and Vibrant Gemstones */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #09090B; /* Sleek obsidian/slate */
+      --foreground: #F8FAFC;
+      --muted: #1E293B;
+      --muted-foreground: #94A3B8;
+      --accent: #F43F5E; /* Vibrant rose/crimson */
+      
+      /* Glowing Gemstone Colors for the blocks */
+      --die-color: #E11D48; /* Ruby Red */
+      --das-color: #10B981; /* Emerald Green */
+      --der-color: #3B82F6; /* Sapphire Blue */
+    }
   }
 }
 
