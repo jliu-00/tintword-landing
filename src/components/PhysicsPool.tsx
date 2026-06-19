@@ -194,8 +194,8 @@ export function PhysicsPool() {
                   
                   // Violent blast for the offending word
                   Matter.Body.setVelocity(bodyA, { 
-                    x: -(dx / Math.sqrt(distSq)) * 40, 
-                    y: -(dy / Math.sqrt(distSq)) * 40 
+                    x: -(dx / Math.sqrt(distSq)) * 15, 
+                    y: -(dy / Math.sqrt(distSq)) * 15 
                   });
 
                   // Spit out all previously eaten words by THIS vortex
@@ -210,7 +210,7 @@ export function PhysicsPool() {
                       Matter.Body.setPosition(wBody, { x: vortex.position.x, y: vortex.position.y });
                       
                       const angle = Math.random() * Math.PI * 2;
-                      const spd = 15 + Math.random() * 15;
+                      const spd = 5 + Math.random() * 10;
                       Matter.Body.setVelocity(wBody, { x: Math.cos(angle) * spd, y: Math.sin(angle) * spd });
                     }
                   });
@@ -244,6 +244,12 @@ export function PhysicsPool() {
               Matter.Body.applyForce(bodyB, bodyB.position, { x: fx, y: fy });
             }
           }
+        }
+
+        // 3. Keep words in bounds if they get blasted out
+        if (bodyA.position.y > physicsHeight + 300 || bodyA.position.y < -300 || bodyA.position.x < -300 || bodyA.position.x > width + 300) {
+          Matter.Body.setPosition(bodyA, { x: width / 2, y: physicsHeight / 4 });
+          Matter.Body.setVelocity(bodyA, { x: 0, y: 0 });
         }
       }
     });
