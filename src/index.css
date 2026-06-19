@@ -34,10 +34,10 @@
       --muted-foreground: #94A3B8;
       --accent: #F43F5E; /* Vibrant rose/crimson */
       
-      /* Glowing Gemstone Colors for the blocks */
-      --die-color: #E11D48; /* Ruby Red */
-      --das-color: #10B981; /* Emerald Green */
-      --der-color: #3B82F6; /* Sapphire Blue */
+      /* Elegant Morandi Colors for the blocks in Dark Mode */
+      --die-color: #AD8A8D; /* Muted Rose */
+      --das-color: #8B9C89; /* Grey Green */
+      --der-color: #6B7F8C; /* Grey Blue */
     }
   }
 }

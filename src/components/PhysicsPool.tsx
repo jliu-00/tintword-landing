@@ -83,7 +83,8 @@ export function PhysicsPool() {
     const dropHeights = wordsData.map((_, i) => -100 - (i * 250) - Math.random() * 100).sort(() => Math.random() - 0.5);
     
     const wordBodies = wordsData.map((w, index) => {
-      const x = Math.random() * (width - 200) + 100;
+      // Spread across the full width, keeping a 60px padding from edges
+      const x = Math.random() * (width - 120) + 60;
       const y = dropHeights[index];
       
       const body = Bodies.rectangle(x, y, w.w, w.h, {
@@ -93,6 +94,10 @@ export function PhysicsPool() {
         density: 0.05,
         collisionFilter: { category: CAT_WORD, mask: 0xFFFFFFFF }
       });
+
+      // Give them a slight random toss and spin so they don't fall in a rigid straight line
+      Matter.Body.setVelocity(body, { x: (Math.random() - 0.5) * 6, y: 0 });
+      Matter.Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.15);
 
       (body as any).gender = w.gender;
       (body as any).isAbsorbed = false;
@@ -381,32 +386,29 @@ export function PhysicsPool() {
       </div>
 
       {/* Wandering Vortex Visuals */}
-      {/* Sleek, glowing gemstone vortexes using CSS color-mix for opacity */}
+      {/* Subtle, elegant Morandi gradient vortexes */}
       <div 
         className="absolute rounded-full pointer-events-none transition-transform duration-[50ms]"
         style={{
           width: 160, height: 160,
-          background: "radial-gradient(circle, color-mix(in srgb, var(--der-color) 40%, transparent) 0%, transparent 70%)",
-          transform: `translate(${vortexPositions.der.x - 80}px, ${vortexPositions.der.y - 80}px)`,
-          boxShadow: "0 0 40px color-mix(in srgb, var(--der-color) 20%, transparent)"
+          background: "radial-gradient(circle, color-mix(in srgb, var(--der-color) 25%, transparent) 0%, transparent 70%)",
+          transform: `translate(${vortexPositions.der.x - 80}px, ${vortexPositions.der.y - 80}px)`
         }}
       />
       <div 
         className="absolute rounded-full pointer-events-none transition-transform duration-[50ms]"
         style={{
           width: 160, height: 160,
-          background: "radial-gradient(circle, color-mix(in srgb, var(--die-color) 40%, transparent) 0%, transparent 70%)",
-          transform: `translate(${vortexPositions.die.x - 80}px, ${vortexPositions.die.y - 80}px)`,
-          boxShadow: "0 0 40px color-mix(in srgb, var(--die-color) 20%, transparent)"
+          background: "radial-gradient(circle, color-mix(in srgb, var(--die-color) 25%, transparent) 0%, transparent 70%)",
+          transform: `translate(${vortexPositions.die.x - 80}px, ${vortexPositions.die.y - 80}px)`
         }}
       />
       <div 
         className="absolute rounded-full pointer-events-none transition-transform duration-[50ms]"
         style={{
           width: 160, height: 160,
-          background: "radial-gradient(circle, color-mix(in srgb, var(--das-color) 40%, transparent) 0%, transparent 70%)",
-          transform: `translate(${vortexPositions.das.x - 80}px, ${vortexPositions.das.y - 80}px)`,
-          boxShadow: "0 0 40px color-mix(in srgb, var(--das-color) 20%, transparent)"
+          background: "radial-gradient(circle, color-mix(in srgb, var(--das-color) 25%, transparent) 0%, transparent 70%)",
+          transform: `translate(${vortexPositions.das.x - 80}px, ${vortexPositions.das.y - 80}px)`
         }}
       />
 
@@ -415,12 +417,12 @@ export function PhysicsPool() {
         <div
           key={i}
           ref={(el) => { elementsRef.current[i] = el; }}
-          className="word-block absolute top-0 left-0 flex items-center justify-center text-white font-serif text-xl rounded-2xl cursor-grab active:cursor-grabbing select-none hover:brightness-125 transition-all duration-300 ease-out z-10 border border-white/20 backdrop-blur-md"
+          className="word-block absolute top-0 left-0 flex items-center justify-center text-white font-serif text-xl rounded-xl cursor-grab active:cursor-grabbing select-none hover:brightness-110 transition-all duration-300 ease-out z-10 border border-white/10 backdrop-blur-md"
           style={{
             width: w.w,
             height: w.h,
-            backgroundColor: `color-mix(in srgb, ${w.color} 55%, transparent)`,
-            boxShadow: `0 8px 32px 0 color-mix(in srgb, ${w.color} 30%, transparent), inset 0 2px 4px rgba(255,255,255,0.3)`
+            backgroundColor: `color-mix(in srgb, ${w.color} 75%, transparent)`,
+            boxShadow: `0 4px 12px 0 color-mix(in srgb, ${w.color} 10%, transparent), inset 0 2px 4px rgba(255,255,255,0.2)`
           }}
         >
           {w.text}
