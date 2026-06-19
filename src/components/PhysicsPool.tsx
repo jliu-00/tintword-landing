@@ -162,23 +162,51 @@ export function PhysicsPool() {
                 // If it reaches the exact center (very close), absorb it!
                 if (distSq < 2500) {
                   (bodyA as any).isAbsorbed = true;
+                  (bodyA as any).absorbedBy = targetGender;
                   Matter.Composite.remove(world, bodyA);
                   setScore(s => s + 1);
                 }
               } else {
-                // EXPLOSIVE repulsion from wrong vortex
-                if (distSq < 30000) {
-                  // Force drop if user is holding it
+                // Wrong vortex interaction
+                if (distSq < 2500) {
+                  // EXPLOSION: User dragged wrong word into vortex!
                   if (mouseConstraint.body === bodyA) {
                     (mouseConstraint as any).body = null;
                     mouseConstraint.mouse.button = -1;
                   }
                   
-                  // Use setVelocity for a violent, guaranteed blast
-                  const speed = 50 * (30000 - distSq) / 30000;
+                  // Violent blast for the offending word
                   Matter.Body.setVelocity(bodyA, { 
-                    x: -(dx / Math.sqrt(distSq)) * speed, 
-                    y: -(dy / Math.sqrt(distSq)) * speed 
+                    x: -(dx / Math.sqrt(distSq)) * 40, 
+                    y: -(dy / Math.sqrt(distSq)) * 40 
+                  });
+
+                  // Spit out all previously eaten words by THIS vortex
+                  let lostScore = 0;
+                  wordBodies.forEach(wBody => {
+                    if ((wBody as any).isAbsorbed && (wBody as any).absorbedBy === targetGender) {
+                      (wBody as any).isAbsorbed = false;
+                      (wBody as any).absorbedBy = null;
+                      lostScore++;
+                      
+                      Matter.World.add(world, wBody);
+                      Matter.Body.setPosition(wBody, { x: vortex.position.x, y: vortex.position.y });
+                      
+                      const angle = Math.random() * Math.PI * 2;
+                      const spd = 15 + Math.random() * 15;
+                      Matter.Body.setVelocity(wBody, { x: Math.cos(angle) * spd, y: Math.sin(angle) * spd });
+                    }
+                  });
+
+                  if (lostScore > 0) {
+                    setScore(s => Math.max(0, s - lostScore));
+                  }
+                } else if (distSq < 30000) {
+                  // Mild repulsion from wrong vortex (allows user to force it in if they try hard enough)
+                  const repelForce = 0.0003 * (30000 - distSq) / 30000;
+                  Matter.Body.applyForce(bodyA, bodyA.position, { 
+                    x: -(dx / Math.sqrt(distSq)) * repelForce, 
+                    y: -(dy / Math.sqrt(distSq)) * repelForce 
                   });
                 }
               }
