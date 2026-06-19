@@ -15,8 +15,6 @@ const wordsData = [
   { text: "das Auto", color: "#8B9C89", gender: "das", w: 110, h: 48 },
   { text: "das Haus", color: "#8B9C89", gender: "das", w: 110, h: 48 },
   { text: "das Buch", color: "#8B9C89", gender: "das", w: 110, h: 48 },
-  { text: "abfahren", color: "#9B929A", gender: "none", w: 130, h: 48 },
-  { text: "schnell", color: "#9C928A", gender: "none", w: 110, h: 48 },
 ];
 
 export function PhysicsPool() {
@@ -282,6 +280,8 @@ export function PhysicsPool() {
           } else {
             const { x, y } = body.position;
             el.style.transform = `translate(${x - wordsData[index].w / 2}px, ${y - wordsData[index].h / 2}px) rotate(${body.angle}rad)`;
+            el.style.opacity = "1";
+            el.style.pointerEvents = "auto";
           }
         }
       });
