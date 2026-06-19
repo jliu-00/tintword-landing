@@ -25,11 +25,19 @@ export function PhysicsPool() {
   
   // React state for HUD
   const [score, setScore] = useState(0);
+  const [bestTime, setBestTime] = useState<number | null>(null);
+  const timerRef = useRef<HTMLParagraphElement>(null);
+  
   const [vortexPositions, setVortexPositions] = useState({
     der: { x: 0, y: 0 },
     die: { x: 0, y: 0 },
     das: { x: 0, y: 0 }
   });
+
+  useEffect(() => {
+    const savedBest = localStorage.getItem("tintword_best_time");
+    if (savedBest) setBestTime(Number(savedBest));
+  }, []);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -99,6 +107,17 @@ export function PhysicsPool() {
 
     World.add(world, mouseConstraint);
 
+    // Game state tracking
+    let gameState: "idle" | "playing" | "finished" = "idle";
+    let startTime = 0;
+
+    Events.on(mouseConstraint, "startdrag", () => {
+      if (gameState === "idle") {
+        gameState = "playing";
+        startTime = Date.now();
+      }
+    });
+
     // FIX: Force drop body if mouse is released outside the container
     const handleGlobalMouseUp = () => {
       if (mouseConstraint.body) {
@@ -141,8 +160,8 @@ export function PhysicsPool() {
         const bodyA = bodies[i];
         const genA = (bodyA as any).gender;
         
-        // 1. Vortex Gravity & Repulsion
-        if (genA !== "none") {
+        // 1. Vortex Gravity & Repulsion (Only active when playing)
+        if (genA !== "none" && gameState === "playing") {
           vortexes.forEach(vortex => {
             const dx = vortex.position.x - bodyA.position.x;
             const dy = vortex.position.y - bodyA.position.y;
@@ -201,14 +220,8 @@ export function PhysicsPool() {
                   if (lostScore > 0) {
                     setScore(s => Math.max(0, s - lostScore));
                   }
-                } else if (distSq < 30000) {
-                  // Mild repulsion from wrong vortex (allows user to force it in if they try hard enough)
-                  const repelForce = 0.0003 * (30000 - distSq) / 30000;
-                  Matter.Body.applyForce(bodyA, bodyA.position, { 
-                    x: -(dx / Math.sqrt(distSq)) * repelForce, 
-                    y: -(dy / Math.sqrt(distSq)) * repelForce 
-                  });
                 }
+                // No mild repulsion anymore. Just normal interaction.
               }
             }
           });
@@ -242,6 +255,23 @@ export function PhysicsPool() {
 
     let animationFrameId: number;
     const updateDOM = () => {
+      // Sync React state for vortex visual rendering (limit updates via timeout or just let it run)
+      // Actually setVortexPositions is heavy in requestAnimationFrame, but it's done via React state previously.
+
+      const genderedBodies = Composite.allBodies(world).filter(b => (b as any).gender && (b as any).gender !== "none" && !(b as any).isAbsorbed);
+      if (gameState === "playing" && genderedBodies.length === 0) {
+        gameState = "finished";
+        const finalTime = Date.now() - startTime;
+        if (timerRef.current) {
+          timerRef.current.innerText = (finalTime / 1000).toFixed(2) + "s";
+        }
+        const currentBest = localStorage.getItem("tintword_best_time");
+        if (!currentBest || finalTime < Number(currentBest)) {
+          localStorage.setItem("tintword_best_time", finalTime.toString());
+          setBestTime(finalTime);
+        }
+      }
+
       wordBodies.forEach((body, index) => {
         const el = elementsRef.current[index];
         if (el) {
@@ -255,6 +285,11 @@ export function PhysicsPool() {
           }
         }
       });
+      
+      if (gameState === "playing" && timerRef.current) {
+        timerRef.current.innerText = ((Date.now() - startTime) / 1000).toFixed(2) + "s";
+      }
+
       animationFrameId = requestAnimationFrame(updateDOM);
     };
 
@@ -285,9 +320,15 @@ export function PhysicsPool() {
       
       {/* Background UI & Score */}
       <div className="absolute top-10 w-full flex flex-col items-center justify-center pointer-events-none z-0">
-        {score > 0 && (
-          <p className="text-2xl font-mono text-accent mt-2 tracking-widest opacity-40">Score: {score}</p>
+        <p ref={timerRef} className="text-4xl font-mono text-accent opacity-80 mt-4 tracking-widest">
+          0.00s
+        </p>
+        {bestTime && (
+          <p className="text-lg font-mono text-foreground/50 tracking-widest mt-1">
+            Best: {(bestTime / 1000).toFixed(2)}s
+          </p>
         )}
+        <p className="text-xl font-mono text-accent mt-4 tracking-widest opacity-40">Score: {score}</p>
       </div>
 
       {/* Wandering Vortex Visuals */}
