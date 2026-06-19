@@ -78,9 +78,13 @@ export function PhysicsPool() {
     World.add(world, [vortexDer, vortexDie, vortexDas]);
 
     // Create word bodies
-    const wordBodies = wordsData.map((w) => {
+    // Pre-calculate and shuffle the drop heights so the drop sequence is random,
+    // but the mapping index remains correctly tied to the React DOM nodes.
+    const dropHeights = wordsData.map((_, i) => -100 - (i * 250) - Math.random() * 100).sort(() => Math.random() - 0.5);
+    
+    const wordBodies = wordsData.map((w, index) => {
       const x = Math.random() * (width - 200) + 100;
-      const y = -Math.random() * 500 - 100; 
+      const y = dropHeights[index];
       
       const body = Bodies.rectangle(x, y, w.w, w.h, {
         restitution: 0.6,
