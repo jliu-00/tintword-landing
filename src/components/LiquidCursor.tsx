@@ -8,11 +8,24 @@ export function LiquidCursor() {
   const mouse = useRef({ x: 0, y: 0 });
   
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouse.current = { x: e.clientX, y: e.clientY };
+    const handleMove = (e: MouseEvent | TouchEvent) => {
+      let clientX, clientY;
+      if ('touches' in e) {
+        if (e.touches.length > 0) {
+          clientX = e.touches[0].clientX;
+          clientY = e.touches[0].clientY;
+        } else {
+          return;
+        }
+      } else {
+        clientX = (e as MouseEvent).clientX;
+        clientY = (e as MouseEvent).clientY;
+      }
+      mouse.current = { x: clientX, y: clientY };
     };
 
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("mousemove", handleMove, { passive: true });
+    window.addEventListener("touchmove", handleMove, { passive: true });
 
     // Initial setup of dots
     const dots: { x: number; y: number; el: HTMLDivElement }[] = [];
@@ -49,7 +62,8 @@ export function LiquidCursor() {
     animate();
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mousemove", handleMove);
+      window.removeEventListener("touchmove", handleMove);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
