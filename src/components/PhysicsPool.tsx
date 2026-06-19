@@ -33,8 +33,12 @@ export function PhysicsPool() {
   });
 
   useEffect(() => {
-    const savedBest = localStorage.getItem("tintword_best_time");
-    if (savedBest) setBestTime(Number(savedBest));
+    try {
+      const savedBest = localStorage.getItem("tintword_best_time");
+      if (savedBest) setBestTime(Number(savedBest));
+    } catch (e) {
+      console.warn("localStorage is not available.");
+    }
   }, []);
 
   useEffect(() => {
@@ -317,9 +321,14 @@ export function PhysicsPool() {
         if (timerRef.current) {
           timerRef.current.innerText = (finalTime / 1000).toFixed(2) + "s";
         }
-        const currentBest = localStorage.getItem("tintword_best_time");
-        if (!currentBest || finalTime < Number(currentBest)) {
-          localStorage.setItem("tintword_best_time", finalTime.toString());
+        try {
+          const currentBest = localStorage.getItem("tintword_best_time");
+          if (!currentBest || finalTime < Number(currentBest)) {
+            localStorage.setItem("tintword_best_time", finalTime.toString());
+            setBestTime(finalTime);
+          }
+        } catch (e) {
+          console.warn("localStorage is not available.");
           setBestTime(finalTime);
         }
       }
