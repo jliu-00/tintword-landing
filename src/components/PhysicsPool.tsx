@@ -58,18 +58,22 @@ export function PhysicsPool() {
     // Set fixed height for the physics area so it overlays naturally over the bottom half
     const physicsHeight = 600; 
 
+    // Collision Categories
+    const CAT_WORD = 0x0001;
+    const CAT_BOUNDARY = 0x0002;
+
     // Invisible Boundaries
-    const ground = Bodies.rectangle(width / 2, physicsHeight + 30, width * 2, 60, { isStatic: true, render: { visible: false } });
-    const wallLeft = Bodies.rectangle(-30, physicsHeight / 2, 60, physicsHeight * 2, { isStatic: true, render: { visible: false } });
-    const wallRight = Bodies.rectangle(width + 30, physicsHeight / 2, 60, physicsHeight * 2, { isStatic: true, render: { visible: false } });
+    const ground = Bodies.rectangle(width / 2, physicsHeight + 30, width * 2, 60, { isStatic: true, render: { visible: false }, collisionFilter: { category: CAT_BOUNDARY } });
+    const wallLeft = Bodies.rectangle(-30, physicsHeight / 2, 60, physicsHeight * 2, { isStatic: true, render: { visible: false }, collisionFilter: { category: CAT_BOUNDARY } });
+    const wallRight = Bodies.rectangle(width + 30, physicsHeight / 2, 60, physicsHeight * 2, { isStatic: true, render: { visible: false }, collisionFilter: { category: CAT_BOUNDARY } });
 
     World.add(world, [ground, wallLeft, wallRight]);
 
     // Create Wandering Gravity Vortexes (Sensors)
     // We make them circular sensors that move around
-    const vortexDer = Bodies.circle(width * 0.2, physicsHeight * 0.5, 60, { isStatic: true, isSensor: true, label: "vortex_der" });
-    const vortexDie = Bodies.circle(width * 0.5, physicsHeight * 0.5, 60, { isStatic: true, isSensor: true, label: "vortex_die" });
-    const vortexDas = Bodies.circle(width * 0.8, physicsHeight * 0.5, 60, { isStatic: true, isSensor: true, label: "vortex_das" });
+    const vortexDer = Bodies.circle(width * 0.2, physicsHeight * 0.5, 60, { isStatic: true, isSensor: true, label: "vortex_der", collisionFilter: { category: CAT_BOUNDARY } });
+    const vortexDie = Bodies.circle(width * 0.5, physicsHeight * 0.5, 60, { isStatic: true, isSensor: true, label: "vortex_die", collisionFilter: { category: CAT_BOUNDARY } });
+    const vortexDas = Bodies.circle(width * 0.8, physicsHeight * 0.5, 60, { isStatic: true, isSensor: true, label: "vortex_das", collisionFilter: { category: CAT_BOUNDARY } });
 
     World.add(world, [vortexDer, vortexDie, vortexDas]);
 
@@ -83,6 +87,7 @@ export function PhysicsPool() {
         friction: 0.1,
         frictionAir: 0.05, // more air friction so they float a bit
         density: 0.05,
+        collisionFilter: { category: CAT_WORD, mask: 0xFFFFFFFF }
       });
 
       (body as any).gender = w.gender;
@@ -96,7 +101,8 @@ export function PhysicsPool() {
     const mouse = Mouse.create(containerRef.current);
     const mouseConstraint = MouseConstraint.create(engine, {
       mouse: mouse,
-      constraint: { stiffness: 0.9, render: { visible: false } }
+      constraint: { stiffness: 0.9, render: { visible: false } },
+      collisionFilter: { mask: CAT_WORD } // FIX: Only grab words, ignore invisible ground, walls, and vortexes
     });
 
     // FIX: prevent Matter.js from capturing scroll events so the page is still scrollable
