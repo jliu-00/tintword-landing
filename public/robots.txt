@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tintword.jliu.eu/sitemap.xml
