@@ -11,7 +11,9 @@ const { spawn } = require('child_process');
   await new Promise(resolve => setTimeout(resolve, 3000));
   
   console.log('Launching puppeteer...');
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
   const page = await browser.newPage();
   
   // Set a large viewport
