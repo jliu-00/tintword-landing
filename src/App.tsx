@@ -44,12 +44,16 @@ export default function App() {
         <PhysicsPool />
       </main>
 
-      <footer className="w-full border-t border-foreground/10 py-8 text-center text-muted-foreground">
-        <p className="text-sm font-mono tracking-widest uppercase">
-          &copy; 2026 TintWord. All rights reserved. |{" "}
-          <a href="https://jliu.eu" className="hover:text-accent transition-colors">jliu.eu</a> |{" "}
-          <a href="privacy.html" className="hover:text-accent transition-colors">Privacy Policy</a>
-        </p>
+      <footer data-nosnippet className="w-full border-t border-foreground/10 py-8 text-center text-muted-foreground flex flex-col items-center justify-center gap-2">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 text-sm font-mono tracking-widest uppercase">
+          <span>&copy; 2026 TintWord. All rights reserved.</span>
+          <span className="hidden sm:inline">|</span>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <a href="https://jliu.eu" className="hover:text-accent transition-colors">jliu.eu</a>
+            <span className="opacity-50">|</span>
+            <a href="privacy.html" className="hover:text-accent transition-colors">Privacy Policy</a>
+          </div>
+        </div>
       </footer>
     </motion.div>
   );

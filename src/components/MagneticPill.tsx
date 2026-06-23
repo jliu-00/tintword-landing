@@ -16,6 +16,7 @@ export function MagneticPill({ href }: { href: string }) {
         href={href}
         target="_blank"
         rel="noreferrer"
+        aria-label="Download on Google Play"
         onMouseEnter={() => setActive(true)}
         onMouseLeave={() => setActive(false)}
         drag

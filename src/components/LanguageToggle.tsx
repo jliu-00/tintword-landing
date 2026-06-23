@@ -19,8 +19,12 @@ export function LanguageToggle({ lang, setLang }: LanguageToggleProps) {
       </span>
 
       {/* Retro Metallic Switch Base */}
-      <div
-        className="relative h-7 w-14 cursor-pointer rounded-full p-1"
+      <button
+        type="button"
+        role="switch"
+        aria-checked={lang === "zh"}
+        aria-label={`Toggle language to ${lang === "en" ? "Chinese" : "English"}`}
+        className="relative h-7 w-14 cursor-pointer rounded-full p-1 border-none focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         style={{
           background: "radial-gradient(120% 120% at 32% 28%, #ECE5DC 0%, #CFC6BA 45%, #A89E90 100%)",
           boxShadow: "inset 0 2px 4px rgba(0,0,0,0.3), inset 0 -1px 2px rgba(255,255,255,0.8)",
@@ -56,7 +60,7 @@ export function LanguageToggle({ lang, setLang }: LanguageToggleProps) {
             }}
           />
         </motion.div>
-      </div>
+      </button>
 
       <span
         className={`font-mono text-sm tracking-widest transition-colors ${

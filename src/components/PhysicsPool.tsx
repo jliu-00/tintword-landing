@@ -379,7 +379,7 @@ export function PhysicsPool() {
   return (
     // Removed border, background, and shadow to blend seamlessly into the page
     // Using overflow-visible so blocks don't get abruptly cut off at the container edges
-    <div className="w-full h-[600px] relative overflow-visible pointer-events-auto" ref={containerRef}>
+    <div data-nosnippet className="w-full h-[600px] relative overflow-visible pointer-events-auto" ref={containerRef}>
       
       {/* Background UI & Score */}
       <div className="absolute top-10 w-full flex flex-col items-center justify-center pointer-events-none z-0">
